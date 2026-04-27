@@ -1,0 +1,38 @@
+metadata_version: "1.0"
+name: ai-agent-platform
+pattern_version: "1.0"
+description: >-
+  Deploy an AI Agent Platform on OpenShift using the Bee AI Framework
+  with IBM Granite models, providing agent infrastructure with demo
+  use cases for cluster health monitoring and API exploration.
+display_name: AI Agent Platform with Bee AI Framework
+repo_url: https://github.com/validatedpatterns/ai-agent-platform
+docs_repo_url: https://github.com/validatedpatterns/docs
+issues_url: https://github.com/validatedpatterns/ai-agent-platform/issues
+docs_url: https://validatedpatterns.io/patterns/ai-agent-platform/
+ci_url: https://validatedpatterns.io/ci/?pattern=aiagent
+tier: sandbox
+owners: ganelson
+
+requirements:
+  hub:
+    compute:
+      platform:
+        aws:
+          replicas: 3
+          type: m5.2xlarge
+    controlPlane:
+      platform:
+        aws:
+          replicas: 1
+          type: m5.2xlarge
+
+extra_features:
+  hypershift_support: false
+  spoke_support: false
+
+external_requirements:
+  cluster_sizing_note: >
+    This pattern requires nodes with GPUs which are only supported in
+    certain regions. Use 'make create-gpu-machineset' to provision GPU nodes
+    after the initial cluster has been created.

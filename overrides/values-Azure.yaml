@@ -1,0 +1,4 @@
+---
+global:
+  model:
+    vllm: solidrust/Mistral-7B-Instruct-v0.3-AWQ

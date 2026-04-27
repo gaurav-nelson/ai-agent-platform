@@ -1,0 +1,19 @@
+{{- if .Values.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: agent-chat-ui
+  labels:
+    app.kubernetes.io/name: agent-chat-ui
+spec:
+  host: agent-ui-{{ .Release.Namespace }}.{{ coalesce .Values.global.localClusterDomain .Values.global.hubClusterDomain }}
+  to:
+    kind: Service
+    name: agent-chat-ui
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+{{- end }}

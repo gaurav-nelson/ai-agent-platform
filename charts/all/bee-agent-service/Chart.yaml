@@ -1,0 +1,6 @@
+apiVersion: v2
+name: bee-agent-service
+description: Bee AI Framework agent service with IBM Granite model support
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

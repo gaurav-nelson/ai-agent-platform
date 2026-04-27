@@ -1,0 +1,15 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: bee-agent-cluster-reader
+  labels:
+    app.kubernetes.io/name: bee-agent-service
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "nodes", "events", "services", "namespaces"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets", "daemonsets", "replicasets"]
+    verbs: ["get", "list"]
+{{- end }}

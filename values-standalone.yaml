@@ -1,0 +1,105 @@
+clusterGroup:
+  name: standalone
+  isHubCluster: true
+
+  namespaces:
+    - vault
+    - golang-external-secrets
+    - openshift-nfd
+    - nvidia-gpu-operator
+    - redhat-ods-operator:
+        operatorGroup: true
+        targetNamespaces: []
+    - ai-agent:
+        operatorGroup: true
+        targetNamespaces:
+          - ai-agent
+        labels:
+          opendatahub.io/dashboard: "true"
+          modelmesh-enabled: 'false'
+    - openshift-serverless:
+        operatorGroup: true
+        targetNamespaces: []
+
+  subscriptions:
+    nfd:
+      name: nfd
+      namespace: openshift-nfd
+    nvidia:
+      name: gpu-operator-certified
+      namespace: nvidia-gpu-operator
+      source: certified-operators
+    serverless:
+      name: serverless-operator
+      namespace: openshift-serverless
+    servicemesh:
+      name: servicemeshoperator
+      namespace: openshift-operators
+    rhoai:
+      name: rhods-operator
+      namespace: redhat-ods-operator
+
+  projects:
+    - hub
+    - ai-agent
+    - gpu-config
+    - openshift-ai
+
+  applications:
+    vault:
+      name: vault
+      namespace: vault
+      project: hub
+      chart: hashicorp-vault
+      chartVersion: 0.1.*
+    golang-external-secrets:
+      name: golang-external-secrets
+      namespace: golang-external-secrets
+      project: hub
+      chart: golang-external-secrets
+      chartVersion: 0.1.*
+    vllm-inference-service:
+      name: vllm-inference-service
+      namespace: ai-agent
+      project: hub
+      path: charts/all/vllm-inference-service
+      syncPolicy:
+        automated:
+          selfHeal: true
+        retry:
+          limit: 20
+    pgvector:
+      name: pgvector
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/pgvector
+    sample-api:
+      name: sample-api
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/sample-api
+    bee-agent-service:
+      name: bee-agent-service
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/bee-agent-service
+    agent-chat-ui:
+      name: agent-chat-ui
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/agent-chat-ui
+    nfd-config:
+      name: nfd-config
+      namespace: openshift-cfd
+      project: gpu-config
+      path: charts/all/nfd-config
+    nvidia-config:
+      name: nvidia-config
+      namespace: nvidia-network-operator
+      project: gpu-config
+      path: charts/all/nvidia-gpu-config
+    openshift-ai:
+      name: openshift-ai
+      namespace: redhat-ods-operator
+      project: openshift-ai
+      path: charts/all/rhods

@@ -1,0 +1,19 @@
+{{- if .Values.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: bee-agent-service
+  labels:
+    app.kubernetes.io/name: bee-agent-service
+spec:
+  host: bee-agent-{{ .Release.Namespace }}.{{ coalesce .Values.global.localClusterDomain .Values.global.hubClusterDomain }}
+  to:
+    kind: Service
+    name: bee-agent-service
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+{{- end }}

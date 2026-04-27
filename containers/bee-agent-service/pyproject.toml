@@ -1,0 +1,21 @@
+[project]
+name = "bee-agent-service"
+version = "1.0.0"
+description = "Bee AI Framework agent service for the AI Agent GitOps pattern"
+requires-python = ">=3.11"
+dependencies = [
+    "beeai-framework[search]>=0.1.79",
+    "kubernetes>=31.0.0",
+    "uvicorn>=0.32.0",
+    "fastapi>=0.115.0",
+    "prometheus-client>=0.21.0",
+    "pydantic-settings>=2.11.0",
+    "httpx>=0.28.0",
+]
+
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app", "app.agents", "app.tools"]

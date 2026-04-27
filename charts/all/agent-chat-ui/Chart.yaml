@@ -1,0 +1,6 @@
+apiVersion: v2
+name: agent-chat-ui
+description: Gradio-based chat UI for interacting with Bee AI agents
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

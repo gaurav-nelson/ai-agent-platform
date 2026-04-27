@@ -1,0 +1,23 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  labels:
+    dashboards: "grafana"
+  name: ai-llm-grafana
+spec:
+  route:
+    spec: {}
+  config:
+    auth:
+      disable_login_form: "false"
+      disable_signout_menu: "false"
+    auth.anonymous:
+      enabled: "true"
+    log:
+      level: error
+      mode: console
+    log.frontend:
+      enabled: "true"
+

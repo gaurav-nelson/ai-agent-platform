@@ -1,0 +1,415 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: ai-llm-dashboard
+  labels:
+    app: grafana
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: "grafana"
+  json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "datasource",
+              "uid": "grafana"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 2,
+      "links": [],
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 20,
+          "panels": [],
+          "title": "Row title",
+          "type": "row"
+        },
+        {
+          "datasource": "Prometheus",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "max": 50,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 1
+          },
+          "id": 2,
+          "maxPerRow": 2,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "text": {},
+            "valueMode": "color"
+          },
+          "pluginVersion": "11.3.0",
+          "repeat": "ModelID",
+          "repeatDirection": "h",
+          "targets": [
+            {
+              "datasource": "Prometheus",
+              "exemplar": true,
+              "expr": "sum(feedback_stars_total{namespace=\"$namespace\", model_id=\"${ModelID:raw}\"}) by (stars)",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "$ModelID - RATINGS",
+          "type": "bargauge"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "max": 5,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 2
+                  },
+                  {
+                    "color": "green",
+                    "value": 3.5
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 9
+          },
+          "id": 10,
+          "maxPerRow": 2,
+          "options": {
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "text": {}
+          },
+          "pluginVersion": "7.5.17",
+          "repeat": "ModelID",
+          "repeatDirection": "h",
+          "targets": [
+            {
+              "datasource": "Prometheus",
+              "exemplar": true,
+              "expr": "(sum((feedback_stars_total{namespace=\"$namespace\", stars=\"1\", model_id=\"${ModelID:raw}\"} or on() vector(0))* 1) + sum((feedback_stars_total{namespace=\"$namespace\", stars=\"2\", model_id=\"${ModelID:raw}\"} or on() vector(0)) * 2) +\nsum((feedback_stars_total{namespace=\"$namespace\", stars=\"3\", model_id=\"${ModelID:raw}\"} or on() vector(0)) * 3) + sum((feedback_stars_total{namespace=\"$namespace\", stars=\"4\", model_id=\"${ModelID:raw}\"} or on() vector(0)) * 4) +\nsum((feedback_stars_total{namespace=\"$namespace\", stars=\"5\", model_id=\"${ModelID:raw}\"} or on() vector(0)) * 5)) \n/\n(sum(feedback_stars_total{namespace=\"$namespace\", stars=\"1\", model_id=\"${ModelID:raw}\"} or on() vector(0)) + sum(feedback_stars_total{namespace=\"$namespace\", stars=\"2\", model_id=\"${ModelID:raw}\"} or on() vector(0)) + sum(feedback_stars_total{namespace=\"$namespace\", stars=\"3\", model_id=\"${ModelID:raw}\"} or on() vector(0)) + sum(feedback_stars_total{namespace=\"$namespace\", stars=\"4\", model_id=\"${ModelID:raw}\"} or on() vector(0)) + sum(feedback_stars_total{namespace=\"$namespace\", stars=\"5\", model_id=\"${ModelID:raw}\"} or on() vector(0)))",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "legendFormat": "{{model_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "$ModelID - AVERAGE RATING",
+          "type": "gauge"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 17
+          },
+          "id": 12,
+          "maxPerRow": 2,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {},
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.3.0",
+          "repeat": "ModelID",
+          "repeatDirection": "h",
+          "targets": [
+            {
+              "datasource": "Prometheus",
+              "exemplar": true,
+              "expr": "model_usage_total{model_id=\"${ModelID:raw}\",namespace=\"$namespace\"}",
+              "instant": false,
+              "interval": "",
+              "legendFormat": "{{model_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "$ModelID - MODEL USAGE",
+          "transparent": true,
+          "type": "stat"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "graph": false,
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 24
+          },
+          "id": 14,
+          "maxPerRow": 2,
+          "options": {
+            "graph": {},
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "11.3.0",
+          "targets": [
+            {
+              "datasource": "Prometheus",
+              "exemplar": true,
+              "expr": "request_duration_seconds{namespace=\"${namespace}\"}",
+              "interval": "",
+              "legendFormat": "{{model_id}}",
+              "refId": "A"
+            }
+          ],
+          "title": "RESPONSE TIME  UI -> INFERENCE SERVER",
+          "transparent": true,
+          "type": "timeseries"
+        }
+      ],
+      "preload": false,
+      "refresh": "5s",
+      "schemaVersion": 40,
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "text": "rag-llm",
+              "value": "rag-llm"
+            },
+            "datasource": "Prometheus",
+            "definition": "label_values(namespace)",
+            "includeAll": false,
+            "name": "namespace",
+            "options": [],
+            "query": {
+              "query": "label_values(namespace)",
+              "refId": "StandardVariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "type": "query"
+          },
+          {
+            "current": {
+              "text": [
+                "ibm-granite-instruct"
+              ],
+              "value": [
+                "ibm-granite-instruct"
+              ]
+            },
+            "definition": "label_values(model_id)",
+            "includeAll": true,
+            "multi": true,
+            "name": "ModelID",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(model_id)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "type": "query"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "MODEL FEEDBACK/RATING",
+      "uid": "HtUdEp4Ik",
+      "version": 1,
+      "weekStart": ""
+    }

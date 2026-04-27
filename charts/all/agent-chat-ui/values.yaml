@@ -1,0 +1,29 @@
+global:
+  localClusterDomain: example.com
+  hubClusterDomain: example.com
+
+replicaCount: 1
+
+image:
+  repository: quay.io/validatedpatterns/agent-chat-ui
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 7860
+  metricsPort: 8000
+
+route:
+  enabled: true
+
+env:
+  AGENT_SERVICE_URL: "http://bee-agent-service.ai-agent.svc.cluster.local:9999"
+
+resources:
+  limits:
+    cpu: "2"
+    memory: 2Gi
+  requests:
+    cpu: "1"
+    memory: 1Gi

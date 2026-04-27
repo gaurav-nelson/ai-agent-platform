@@ -1,0 +1,25 @@
+global:
+  localClusterDomain: example.com
+  hubClusterDomain: example.com
+
+replicaCount: 1
+
+image:
+  repository: quay.io/validatedpatterns/sample-api
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+route:
+  enabled: true
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

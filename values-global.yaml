@@ -1,0 +1,20 @@
+---
+global:
+  pattern: ai-agent-platform
+  options:
+    useCSV: false
+    syncPolicy: Automatic
+    installPlanApproval: Automatic
+  model:
+    vllm: ibm-granite/granite-4.0-h-small
+  agent:
+    mode: both
+  db:
+    type: PGVECTOR
+  storageClass: gp3-csi
+
+main:
+  clusterGroupName: hub
+  multiSourceConfig:
+    enabled: true
+    clusterGroupChartVersion: 0.9.*

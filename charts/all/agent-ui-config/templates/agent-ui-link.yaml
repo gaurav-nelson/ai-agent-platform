@@ -1,0 +1,13 @@
+---
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: agent-ui-link
+  namespace: {{ .Values.agentui.namespace }}
+spec:
+  applicationMenu:
+    section: AI Agent Platform
+    imageURL: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiAyYTEwIDEwIDAgMCAxIDEwIDEwIDEwIDEwIDAgMCAxLTEwIDEwQTEwIDEwIDAgMCAxIDIgMTIgMTAgMTAgMCAwIDEgMTIgMnoiLz48cGF0aCBkPSJNOCAxNGgyTTEwIDEwdjQiLz48Y2lyY2xlIGN4PSIxMCIgY3k9IjgiIHI9IjEiLz48cGF0aCBkPSJNMTQgMTRoMk0xNiAxMHY0Ii8+PGNpcmNsZSBjeD0iMTYiIGN5PSI4IiByPSIxIi8+PC9zdmc+
+  href: 'https://agent-ui-{{ .Values.agentui.namespace }}.{{ coalesce .Values.global.localClusterDomain .Values.global.hubClusterDomain }}'
+  location: ApplicationMenu
+  text: 'AI Agent Chat UI'

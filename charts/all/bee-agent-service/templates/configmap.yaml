@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bee-agent-config
+  labels:
+    app.kubernetes.io/name: bee-agent-service
+data:
+  AGENT_MODE: {{ .Values.global.agent.mode | quote }}
+  MODEL_NAME: {{ (split "/" .Values.global.model.vllm)._1 | quote }}
+  VLLM_BASE_URL: {{ .Values.env.VLLM_BASE_URL | quote }}
+  OPENAI_API_KEY: {{ .Values.env.OPENAI_API_KEY | quote }}
+  SAMPLE_API_URL: {{ .Values.env.SAMPLE_API_URL | quote }}
+  SERVER_PORT: {{ .Values.service.port | quote }}
+  METRICS_PORT: {{ .Values.service.metricsPort | quote }}
