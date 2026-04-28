@@ -6,6 +6,8 @@ from validatedpatterns_tests.interop import subscription
 
 logger = logging.getLogger(__name__)
 
+is_addon_mode = os.environ.get("PATTERN_MODE") == "addon"
+
 """
 Validate that the expected operator subscriptions are present and healthy
 on the hub cluster for the AI Agent GitOps pattern.
@@ -13,6 +15,7 @@ on the hub cluster for the AI Agent GitOps pattern.
 
 
 @pytest.mark.subscription_status_hub
+@pytest.mark.skipif(is_addon_mode, reason="No operator subscriptions in add-on mode")
 def test_subscription_status_hub(openshift_dyn_client):
     expected_subs = {
         "openshift-gitops-operator": ["openshift-gitops-operator"],
@@ -21,6 +24,7 @@ def test_subscription_status_hub(openshift_dyn_client):
         "openshift-serverless": ["serverless-operator"],
         "openshift-operators": ["servicemeshoperator"],
         "redhat-ods-operator": ["rhods-operator"],
+        "external-secrets-operator": ["openshift-external-secrets-operator"],
     }
 
     operator_versions = []
