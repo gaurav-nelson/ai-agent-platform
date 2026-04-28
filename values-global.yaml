@@ -9,6 +9,8 @@ global:
     vllm: ibm-granite/granite-4.0-h-small
   agent:
     mode: both
+    enabledAgents: "all"
+    customAgentsDir: ""
   db:
     type: PGVECTOR
   storageClass: gp3-csi

@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 
 import pytest
@@ -7,6 +8,8 @@ from ocp_resources.route import Route
 from validatedpatterns_tests.interop import application, components
 
 logger = logging.getLogger(__name__)
+
+is_addon_mode = os.environ.get("PATTERN_MODE") == "addon"
 
 """
 Validate hub site components for the AI Agent GitOps pattern.
@@ -62,9 +65,9 @@ def test_check_pod_count_hub(openshift_dyn_client):
     ]
     logger.info(f"ai-agent namespace: {len(active_pods)} active pods")
 
-    # Expect at minimum: vllm, pgvector, bee-agent-service, sample-api, agent-chat-ui
-    assert len(active_pods) >= 5, (
-        f"Expected at least 5 active pods in ai-agent namespace, found {len(active_pods)}"
+    min_pods = 4 if is_addon_mode else 5
+    assert len(active_pods) >= min_pods, (
+        f"Expected at least {min_pods} active pods in ai-agent namespace, found {len(active_pods)}"
     )
 
 
@@ -93,6 +96,7 @@ def test_validate_agent_ui_route(openshift_dyn_client):
 
 
 @pytest.mark.validate_nodefeaturediscovery
+@pytest.mark.skipif(is_addon_mode, reason="NFD not deployed in add-on mode")
 def test_validate_nodefeaturediscovery(openshift_dyn_client):
     result = subprocess.run(
         ["oc", "get", "nodefeaturediscovery", "nfd-instance", "-n", "openshift-nfd"],
@@ -106,6 +110,7 @@ def test_validate_nodefeaturediscovery(openshift_dyn_client):
 
 
 @pytest.mark.validate_gpu_clusterpolicy
+@pytest.mark.skipif(is_addon_mode, reason="GPU not deployed in add-on mode")
 def test_validate_gpu_clusterpolicy(openshift_dyn_client):
     result = subprocess.run(
         [

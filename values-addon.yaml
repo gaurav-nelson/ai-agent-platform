@@ -1,0 +1,40 @@
+clusterGroup:
+  name: addon
+  isHubCluster: true
+
+  namespaces:
+    - ai-agent:
+        operatorGroup: true
+        targetNamespaces:
+          - ai-agent
+        labels:
+          opendatahub.io/dashboard: "true"
+          modelmesh-enabled: 'false'
+
+  projects:
+    - ai-agent
+
+  sharedValueFiles:
+    - '/overrides/values-{{ $.Values.global.clusterPlatform }}.yaml'
+
+  applications:
+    pgvector:
+      name: pgvector
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/pgvector
+    sample-api:
+      name: sample-api
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/sample-api
+    bee-agent-service:
+      name: bee-agent-service
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/bee-agent-service
+    agent-chat-ui:
+      name: agent-chat-ui
+      namespace: ai-agent
+      project: ai-agent
+      path: charts/all/agent-chat-ui

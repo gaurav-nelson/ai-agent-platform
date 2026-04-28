@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 
 import pytest
@@ -7,6 +8,8 @@ from ocp_resources.route import Route
 
 logger = logging.getLogger(__name__)
 
+is_addon_mode = os.environ.get("PATTERN_MODE") == "addon"
+
 """
 Validate AI agent-specific services for the AI Agent GitOps pattern.
 Checks vLLM inference, bee-agent-service, sample-api, and agent-chat-ui.
@@ -14,6 +17,7 @@ Checks vLLM inference, bee-agent-service, sample-api, and agent-chat-ui.
 
 
 @pytest.mark.validate_vllm_serving
+@pytest.mark.skipif(is_addon_mode, reason="vLLM not deployed in add-on mode")
 def test_validate_vllm_serving(openshift_dyn_client):
     pods = list(Pod.get(dyn_client=openshift_dyn_client, namespace="ai-agent"))
 
