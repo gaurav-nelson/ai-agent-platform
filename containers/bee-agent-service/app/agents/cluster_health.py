@@ -1,3 +1,5 @@
+AGENT_NAME = "cluster-health"
+
 from beeai_framework.agents.react import ReActAgent
 from beeai_framework.memory import TokenMemory
 

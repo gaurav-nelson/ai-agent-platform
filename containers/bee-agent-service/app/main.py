@@ -43,26 +43,20 @@ class ChatResponse(BaseModel):
 async def startup():
     global llm, agents
 
-    logger.info(f"Connecting to vLLM at {settings.VLLM_BASE_URL} with model {settings.MODEL_NAME}")
+    logger.info(f"Connecting to LLM at {settings.VLLM_BASE_URL} with model {settings.MODEL_NAME}")
     llm = OpenAIChatModel(
         model_id=settings.MODEL_NAME,
         base_url=settings.VLLM_BASE_URL,
         api_key=settings.OPENAI_API_KEY,
     )
 
-    mode = settings.AGENT_MODE
-    if mode in ("cluster-health", "both"):
-        from app.agents.cluster_health import create_cluster_health_agent
-        agents["cluster-health"] = create_cluster_health_agent(llm)
-        logger.info("Registered cluster-health agent")
-
-    if mode in ("api-explorer", "both"):
-        try:
-            from app.agents.api_explorer import create_api_explorer_agent
-            agents["api-explorer"] = create_api_explorer_agent(llm)
-            logger.info("Registered api-explorer agent")
-        except Exception as e:
-            logger.warning(f"Failed to initialize api-explorer agent: {e}")
+    from app.agent_loader import discover_agents
+    agents = discover_agents(
+        enabled=settings.ENABLED_AGENTS,
+        custom_dir=settings.CUSTOM_AGENTS_DIR,
+        llm=llm,
+        legacy_mode=settings.AGENT_MODE,
+    )
 
     start_metrics_server()
     logger.info(f"Agent service ready. Available agents: {list(agents.keys())}")

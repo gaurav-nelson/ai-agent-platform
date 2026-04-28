@@ -1,3 +1,5 @@
+AGENT_NAME = "api-explorer"
+
 import httpx
 
 from beeai_framework.agents.react import ReActAgent
