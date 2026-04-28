@@ -108,7 +108,12 @@ The pattern deploys a Grafana dashboard with agent metrics. Access it through th
 1. In the OpenShift web console, look for the **AI Agent Monitoring** link in the application launcher menu.
 2. The dashboard displays agent request rates, tool call distribution, response times, and token usage.
 
+## Deploying as an add-on to an existing pattern
+
+If you already have another validated pattern running on your cluster, you can install the AI Agent Platform alongside it. See [Deploying as an add-on](../addon-deployment) for instructions.
+
 ## Next steps
 
 - [Ideas for customization](../ideas-for-customization) - Add your own agents, tools, and APIs
+- [Deploying as an add-on](../addon-deployment) - Install alongside an existing validated pattern
 - [Troubleshooting](../troubleshooting) - Resolve common deployment issues

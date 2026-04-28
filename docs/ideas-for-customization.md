@@ -10,18 +10,26 @@ This pattern provides a building block for AI agent deployments. The following s
 
 ## Adding your own agents
 
-Create new agent modules in `containers/bee-agent-service/app/agents/`. Each agent consists of a ReAct agent with a set of tools and a system prompt.
+The pattern uses an agent auto-discovery system. Each agent module must export two items:
 
-For example, to create a log analysis agent:
+- `AGENT_NAME`: A string that identifies the agent (for example, `"log-analyzer"`).
+- `create_agent(llm)`: A function that accepts an LLM instance and returns a Bee AI Framework agent.
 
-1. Create a new file `containers/bee-agent-service/app/agents/log_analyzer.py`.
-2. Define your agent with the appropriate tools:
+You can add agents in two ways:
+
+### Option 1: Build into the container image
+
+Create a new file in `containers/bee-agent-service/app/agents/`. For example, to create a log analysis agent:
+
+1. Create `containers/bee-agent-service/app/agents/log_analyzer.py`:
 
    ```python
+   AGENT_NAME = "log-analyzer"
+
    from beeai_framework.agents.react import ReActAgent
    from beeai_framework.memory import TokenMemory
 
-   def create_log_analyzer_agent(llm):
+   def create_agent(llm):
        return ReActAgent(
            llm=llm,
            tools=[your_log_tools],
@@ -29,8 +37,29 @@ For example, to create a log analysis agent:
        )
    ```
 
-3. Register the agent in `containers/bee-agent-service/app/main.py` by adding it to the agent registry.
-4. Rebuild and push the bee-agent-service container image.
+2. Rebuild and push the bee-agent-service container image. The agent is discovered automatically at startup.
+
+### Option 2: Mount as a ConfigMap (no image rebuild)
+
+For lightweight agents that use only the dependencies available in the base image:
+
+1. Create a ConfigMap containing your agent Python file:
+
+   ```shell
+   oc create configmap custom-agents --from-file=log_analyzer.py -n ai-agent
+   ```
+
+2. Enable custom agent loading in the Helm chart values by setting `customAgents.enabled` to `true` and `customAgents.configMapName` to `custom-agents`.
+
+3. The service mounts the ConfigMap at `/custom-agents` and discovers the agent module at startup.
+
+### Controlling which agents to load
+
+Set the `ENABLED_AGENTS` environment variable to control agent loading:
+
+- `""` (empty): Falls back to legacy `AGENT_MODE` behavior for backward compatibility.
+- `"all"`: Loads every agent discovered in both the built-in and custom directories.
+- `"cluster-health,log-analyzer"`: Loads only the specified agents by name.
 
 ## Creating custom tools
 

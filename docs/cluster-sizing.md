@@ -32,7 +32,7 @@ The following table breaks down CPU and memory requests and limits for each comp
 
 ## GPU requirements
 
-The IBM Granite 4.0-H-Small model is a Mixture-of-Experts (MoE) architecture with 32B total parameters and 9B active parameters. This design allows the model to run on a single GPU with 24 GB of VRAM, such as the NVIDIA L4 available on AWS `g6.2xlarge` instances.
+The IBM Granite 4.0-H-Small model is a Mixture-of-Experts (MoE) architecture with 32B total parameters and 9B active parameters. With this design, the model can run on a single GPU with 24 GB of VRAM, such as the NVIDIA L4 available on AWS `g6.2xlarge` instances.
 
 The vLLM serving configuration uses:
 
