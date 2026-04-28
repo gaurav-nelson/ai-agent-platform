@@ -5,6 +5,8 @@ global:
     vllm: ibm-granite/granite-4.0-h-small
   agent:
     mode: both
+    enabledAgents: ""
+    customAgentsDir: ""
 
 replicaCount: 1
 
@@ -40,3 +42,8 @@ resources:
   requests:
     cpu: 500m
     memory: 512Mi
+
+customAgents:
+  enabled: false
+  mountPath: /custom-agents
+  configMapName: custom-agents

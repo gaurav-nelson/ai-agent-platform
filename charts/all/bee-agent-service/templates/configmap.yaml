@@ -12,3 +12,5 @@ data:
   SAMPLE_API_URL: {{ .Values.env.SAMPLE_API_URL | quote }}
   SERVER_PORT: {{ .Values.service.port | quote }}
   METRICS_PORT: {{ .Values.service.metricsPort | quote }}
+  ENABLED_AGENTS: {{ .Values.global.agent.enabledAgents | default "" | quote }}
+  CUSTOM_AGENTS_DIR: {{ if .Values.customAgents.enabled }}{{ .Values.customAgents.mountPath | quote }}{{ else }}""{{ end }}

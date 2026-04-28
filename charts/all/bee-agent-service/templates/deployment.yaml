@@ -60,6 +60,12 @@ spec:
             failureThreshold: 24
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.customAgents.enabled }}
+          volumeMounts:
+            - name: custom-agents
+              mountPath: {{ .Values.customAgents.mountPath }}
+              readOnly: true
+          {{- end }}
           securityContext:
             capabilities:
               drop:
@@ -68,3 +74,9 @@ spec:
             allowPrivilegeEscalation: false
             seccompProfile:
               type: RuntimeDefault
+      {{- if .Values.customAgents.enabled }}
+      volumes:
+        - name: custom-agents
+          configMap:
+            name: {{ .Values.customAgents.configMapName }}
+      {{- end }}
