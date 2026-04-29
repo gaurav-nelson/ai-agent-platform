@@ -1,11 +1,10 @@
 import asyncio
 from typing import Any
 
-from kubernetes import client, config
-from pydantic import BaseModel, Field
-
 from beeai_framework.context import RunContext
 from beeai_framework.tools.tool import StringToolOutput, Tool, ToolRunOptions
+from kubernetes import client, config
+from pydantic import BaseModel, Field
 
 
 def _load_k8s_config():
