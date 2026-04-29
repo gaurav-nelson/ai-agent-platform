@@ -66,7 +66,9 @@ def _scan_directory(directory: Path, package: str | None = None) -> dict:
             if agent_name and callable(create_fn):
                 found[agent_name] = mod
             else:
-                logger.debug(f"Skipping {path.name}: missing AGENT_NAME or create_agent")
+                logger.debug(
+                    f"Skipping {path.name}: missing AGENT_NAME or create_agent"
+                )
         except Exception as e:
             logger.warning(f"Error loading agent module {path.name}: {e}")
 

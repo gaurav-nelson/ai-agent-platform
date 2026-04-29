@@ -1,19 +1,16 @@
-import asyncio
 import logging
 import time
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 import uvicorn
-
-from beeai_framework.adapters.openai.backend.chat import OpenAIChatModel
-
 from app.config import settings
 from app.metrics import (
     agent_request_duration_seconds,
     agent_requests_total,
     start_metrics_server,
 )
+from beeai_framework.adapters.openai.backend.chat import OpenAIChatModel
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,7 +40,9 @@ class ChatResponse(BaseModel):
 async def startup():
     global llm, agents
 
-    logger.info(f"Connecting to LLM at {settings.VLLM_BASE_URL} with model {settings.MODEL_NAME}")
+    logger.info(
+        f"Connecting to LLM at {settings.VLLM_BASE_URL} with model {settings.MODEL_NAME}"
+    )
     llm = OpenAIChatModel(
         model_id=settings.MODEL_NAME,
         base_url=settings.VLLM_BASE_URL,
@@ -51,6 +50,7 @@ async def startup():
     )
 
     from app.agent_loader import discover_agents
+
     agents = discover_agents(
         enabled=settings.ENABLED_AGENTS,
         custom_dir=settings.CUSTOM_AGENTS_DIR,
@@ -85,7 +85,9 @@ async def chat(request: ChatRequest):
     start = time.time()
 
     try:
-        output = await agent.run(request.message, max_retries_per_step=3, max_iterations=8)
+        output = await agent.run(
+            request.message, max_retries_per_step=3, max_iterations=8
+        )
         duration = time.time() - start
 
         agent_requests_total.labels(agent_name=agent_name, status="success").inc()

@@ -1,6 +1,5 @@
-from prometheus_client import Counter, Histogram, start_http_server
-
 from app.config import settings
+from prometheus_client import Counter, Histogram, start_http_server
 
 agent_requests_total = Counter(
     "agent_requests_total",

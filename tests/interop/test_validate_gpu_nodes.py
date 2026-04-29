@@ -36,11 +36,17 @@ def test_validate_gpu_nodes(openshift_dyn_client):
             taints = spec.get("taints", [])
             if taints:
                 for taint in taints:
-                    logger.info(f"  Taint: {taint.key}={taint.get('value', '')}:{taint.effect}")
+                    logger.info(
+                        f"  Taint: {taint.key}={taint.get('value', '')}:{taint.effect}"
+                    )
 
             labels = spec.metadata.get("labels", {})
             for key, val in labels.items():
-                if "gpu" in key.lower() or "nvidia" in key.lower() or "odh" in key.lower():
+                if (
+                    "gpu" in key.lower()
+                    or "nvidia" in key.lower()
+                    or "odh" in key.lower()
+                ):
                     logger.info(f"  Label: {key}={val}")
 
     assert len(gpu_machinesets) > 0, (
@@ -72,7 +78,9 @@ def test_validate_gpu_node_role_labels_pods(openshift_dyn_client):
         if p.instance.status.phase == "Running"
     ]
 
-    logger.info(f"NVIDIA GPU operator pods: {len(running_pods)} running out of {len(nvidia_pods)} total")
+    logger.info(
+        f"NVIDIA GPU operator pods: {len(running_pods)} running out of {len(nvidia_pods)} total"
+    )
 
     assert len(running_pods) >= 4, (
         f"Expected at least 4 running NVIDIA pods, found {len(running_pods)}"

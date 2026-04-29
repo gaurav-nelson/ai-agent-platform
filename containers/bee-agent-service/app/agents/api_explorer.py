@@ -1,12 +1,10 @@
-AGENT_NAME = "api-explorer"
-
 import httpx
-
+from app.config import settings
 from beeai_framework.agents.react import ReActAgent
 from beeai_framework.memory import TokenMemory
 from beeai_framework.tools.openapi import OpenAPITool
 
-from app.config import settings
+AGENT_NAME = "api-explorer"
 
 
 def create_api_explorer_agent(llm):

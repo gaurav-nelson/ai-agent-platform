@@ -1,5 +1,4 @@
 import os
-import threading
 
 import gradio as gr
 import httpx
@@ -8,7 +7,9 @@ from prometheus_client import Counter, start_http_server
 AGENT_SERVICE_URL = os.environ.get("AGENT_SERVICE_URL", "http://bee-agent-service:9999")
 METRICS_PORT = int(os.environ.get("METRICS_PORT", "8000"))
 
-ui_requests = Counter("agent_ui_requests_total", "Total chat requests from UI", ["agent"])
+ui_requests = Counter(
+    "agent_ui_requests_total", "Total chat requests from UI", ["agent"]
+)
 
 
 def get_available_agents():
@@ -31,7 +32,9 @@ def chat(message, history, agent_name):
             data = resp.json()
             response_text = data["response"]
             duration = data.get("duration_seconds", "?")
-            return f"{response_text}\n\n---\n*Agent: {agent_name} | Duration: {duration}s*"
+            return (
+                f"{response_text}\n\n---\n*Agent: {agent_name} | Duration: {duration}s*"
+            )
         else:
             return f"Error: {resp.status_code} - {resp.text}"
     except httpx.TimeoutException:

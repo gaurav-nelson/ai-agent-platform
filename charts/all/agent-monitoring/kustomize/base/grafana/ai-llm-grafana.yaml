@@ -20,4 +20,3 @@ spec:
       mode: console
     log.frontend:
       enabled: "true"
-

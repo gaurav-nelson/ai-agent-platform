@@ -37,7 +37,9 @@ jobs:
       - name: Verify secrets json schema against templates
         run: |
           cp ./values-secret.yaml.template ./values-secret.yaml
-          check-jsonschema --fill-defaults --schemafile https://raw.githubusercontent.com/validatedpatterns/rhvp.cluster_utils/refs/heads/main/roles/vault_utils/values-secrets.v2.schema.json values-secret.yaml
+          SCHEMA="https://raw.githubusercontent.com/validatedpatterns/rhvp.cluster_utils"
+          SCHEMA="${SCHEMA}/refs/heads/main/roles/vault_utils/values-secrets.v2.schema.json"
+          check-jsonschema --fill-defaults --schemafile "${SCHEMA}" values-secret.yaml
           rm -f ./values-secret.yaml
 
       - name: Verify ClusterGroup values.schema.json against values-*yaml files
@@ -53,7 +55,8 @@ jobs:
             # disable shellcheck of single quotes in yq
             # shellcheck disable=2016
             yq eval-all '. as $item ireduce ({}; . * $item )' values-global.yaml "$i" > tmp.yaml
-            check-jsonschema --fill-defaults --schemafile https://raw.githubusercontent.com/validatedpatterns/clustergroup-chart/refs/heads/main/values.schema.json tmp.yaml
+            SCHEMA="https://raw.githubusercontent.com/validatedpatterns/clustergroup-chart"
+            SCHEMA="${SCHEMA}/refs/heads/main/values.schema.json"
+            check-jsonschema --fill-defaults --schemafile "${SCHEMA}" tmp.yaml
             rm -f tmp.yaml
           done
-

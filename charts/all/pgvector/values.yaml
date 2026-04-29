@@ -75,7 +75,7 @@ affinity: {}
 
 # Secret configuration for pgvector
 # These values can be overridden from a parent chart or via --set flags
-# Example: helm install ... 
+# Example: helm install ...
 # --set pgvector.secret.user=myuser -
 # --set pgvector.secret.password=mypass
 secret:

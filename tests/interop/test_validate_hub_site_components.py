@@ -67,7 +67,8 @@ def test_check_pod_count_hub(openshift_dyn_client):
 
     min_pods = 4 if is_addon_mode else 5
     assert len(active_pods) >= min_pods, (
-        f"Expected at least {min_pods} active pods in ai-agent namespace, found {len(active_pods)}"
+        f"Expected at least {min_pods} active pods in ai-agent namespace, "
+        f"found {len(active_pods)}"
     )
 
 
