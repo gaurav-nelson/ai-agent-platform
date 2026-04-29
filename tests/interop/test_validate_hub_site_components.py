@@ -26,9 +26,7 @@ def test_validate_hub_site_components(openshift_dyn_client):
         pods = list(Pod.get(dyn_client=openshift_dyn_client, namespace=ns))
         logger.info(f"Namespace {ns}: {len(pods)} pods")
         for pod in pods:
-            logger.info(
-                f"  {pod.instance.metadata.name}: {pod.instance.status.phase}"
-            )
+            logger.info(f"  {pod.instance.metadata.name}: {pod.instance.status.phase}")
 
 
 @pytest.mark.validate_hub_site_reachable
@@ -60,8 +58,7 @@ def test_check_pod_status(openshift_dyn_client):
 def test_check_pod_count_hub(openshift_dyn_client):
     pods = list(Pod.get(dyn_client=openshift_dyn_client, namespace="ai-agent"))
     active_pods = [
-        p for p in pods
-        if p.instance.status.phase not in ("Succeeded", "Failed")
+        p for p in pods if p.instance.status.phase not in ("Succeeded", "Failed")
     ]
     logger.info(f"ai-agent namespace: {len(active_pods)} active pods")
 
@@ -81,19 +78,17 @@ def test_validate_argocd_reachable_hub_site(openshift_dyn_client):
 
 @pytest.mark.validate_agent_ui_route
 def test_validate_agent_ui_route(openshift_dyn_client):
-    routes = list(
-        Route.get(dyn_client=openshift_dyn_client, namespace="ai-agent")
-    )
+    routes = list(Route.get(dyn_client=openshift_dyn_client, namespace="ai-agent"))
     route_names = [r.instance.metadata.name for r in routes]
     logger.info(f"Routes in ai-agent namespace: {route_names}")
 
-    assert "agent-chat-ui" in route_names, (
-        f"agent-chat-ui route not found. Available routes: {route_names}"
-    )
+    assert (
+        "agent-chat-ui" in route_names
+    ), f"agent-chat-ui route not found. Available routes: {route_names}"
 
-    assert "bee-agent-service" in route_names, (
-        f"bee-agent-service route not found. Available routes: {route_names}"
-    )
+    assert (
+        "bee-agent-service" in route_names
+    ), f"bee-agent-service route not found. Available routes: {route_names}"
 
 
 @pytest.mark.validate_nodefeaturediscovery
@@ -105,9 +100,9 @@ def test_validate_nodefeaturediscovery(openshift_dyn_client):
         text=True,
     )
     logger.info(f"NFD instance check: {result.stdout}")
-    assert result.returncode == 0, (
-        f"NodeFeatureDiscovery nfd-instance not found: {result.stderr}"
-    )
+    assert (
+        result.returncode == 0
+    ), f"NodeFeatureDiscovery nfd-instance not found: {result.stderr}"
 
 
 @pytest.mark.validate_gpu_clusterpolicy
@@ -115,16 +110,17 @@ def test_validate_nodefeaturediscovery(openshift_dyn_client):
 def test_validate_gpu_clusterpolicy(openshift_dyn_client):
     result = subprocess.run(
         [
-            "oc", "get", "clusterpolicy",
+            "oc",
+            "get",
+            "clusterpolicy",
             "ai-agent-platform-nvidia-gpu-config-gpu-cluster-policy",
-            "-o", "json",
+            "-o",
+            "json",
         ],
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 0, (
-        f"GPU ClusterPolicy not found: {result.stderr}"
-    )
+    assert result.returncode == 0, f"GPU ClusterPolicy not found: {result.stderr}"
     logger.info("GPU ClusterPolicy found and accessible")
 
 
@@ -133,9 +129,7 @@ def test_validate_argocd_applications_health_hub_site(openshift_dyn_client):
     unhealthy = []
 
     for ns in ["openshift-gitops", "ai-agent-platform-hub"]:
-        apps = application.get_argocd_application_status(
-            openshift_dyn_client, ns
-        )
+        apps = application.get_argocd_application_status(openshift_dyn_client, ns)
         if apps:
             for app_name, health in apps.items():
                 logger.info(f"ArgoCD app {ns}/{app_name}: {health}")

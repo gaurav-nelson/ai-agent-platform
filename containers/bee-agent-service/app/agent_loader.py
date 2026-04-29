@@ -80,6 +80,7 @@ def _legacy_load(mode: str, llm: Any) -> dict:
     if mode in ("cluster-health", "both"):
         try:
             from app.agents.cluster_health import create_cluster_health_agent
+
             agents["cluster-health"] = create_cluster_health_agent(llm)
             logger.info("Registered cluster-health agent (legacy mode)")
         except Exception as e:
@@ -88,6 +89,7 @@ def _legacy_load(mode: str, llm: Any) -> dict:
     if mode in ("api-explorer", "both"):
         try:
             from app.agents.api_explorer import create_api_explorer_agent
+
             agents["api-explorer"] = create_api_explorer_agent(llm)
             logger.info("Registered api-explorer agent (legacy mode)")
         except Exception as e:

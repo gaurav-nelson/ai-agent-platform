@@ -19,7 +19,9 @@ links:
 
 # AI Agent Platform
 
-The AI Agent Platform pattern deploys a complete infrastructure for running AI agents on Red Hat OpenShift Container Platform. It uses the [Bee AI Framework](https://github.com/i-am-bee/beeai-framework) for agent orchestration and IBM Granite models served through vLLM for inference. The pattern provides the building blocks for enterprise AI agent deployments and includes two demo agents that you can customize or replace with your own.
+The AI Agent Platform pattern deploys a complete infrastructure for running AI agents on Red Hat OpenShift Container Platform.
+It uses the [Bee AI Framework](https://github.com/i-am-bee/beeai-framework) for agent orchestration and IBM Granite models served through vLLM for inference.
+The pattern provides the building blocks for enterprise AI agent deployments and includes two demo agents that you can customize or replace with your own.
 
 The pattern supports two deployment modes:
 

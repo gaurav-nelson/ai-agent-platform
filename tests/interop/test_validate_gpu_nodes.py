@@ -49,9 +49,9 @@ def test_validate_gpu_nodes(openshift_dyn_client):
                 ):
                     logger.info(f"  Label: {key}={val}")
 
-    assert len(gpu_machinesets) > 0, (
-        "No GPU MachineSet found. Run 'make create-gpu-machineset' to provision GPU nodes."
-    )
+    assert (
+        len(gpu_machinesets) > 0
+    ), "No GPU MachineSet found. Run 'make create-gpu-machineset' to provision GPU nodes."
 
 
 @pytest.mark.validate_gpu_node_role_labels_pods
@@ -73,15 +73,12 @@ def test_validate_gpu_node_role_labels_pods(openshift_dyn_client):
             namespace="nvidia-gpu-operator",
         )
     )
-    running_pods = [
-        p for p in nvidia_pods
-        if p.instance.status.phase == "Running"
-    ]
+    running_pods = [p for p in nvidia_pods if p.instance.status.phase == "Running"]
 
     logger.info(
         f"NVIDIA GPU operator pods: {len(running_pods)} running out of {len(nvidia_pods)} total"
     )
 
-    assert len(running_pods) >= 4, (
-        f"Expected at least 4 running NVIDIA pods, found {len(running_pods)}"
-    )
+    assert (
+        len(running_pods) >= 4
+    ), f"Expected at least 4 running NVIDIA pods, found {len(running_pods)}"

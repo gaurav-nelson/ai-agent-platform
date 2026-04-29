@@ -54,16 +54,11 @@ class GetPodsTool(Tool[GetPodsInput, ToolRunOptions, StringToolOutput]):
             name = pod.metadata.name
             phase = pod.status.phase
             restarts = sum(
-                cs.restart_count
-                for cs in (pod.status.container_statuses or [])
+                cs.restart_count for cs in (pod.status.container_statuses or [])
             )
-            lines.append(
-                f"{name}  Status={phase}  Restarts={restarts}"
-            )
+            lines.append(f"{name}  Status={phase}  Restarts={restarts}")
         if not lines:
-            return StringToolOutput(
-                f"No pods found in namespace '{input.namespace}'"
-            )
+            return StringToolOutput(f"No pods found in namespace '{input.namespace}'")
         return StringToolOutput("\n".join(lines))
 
 
@@ -74,8 +69,7 @@ class GetNodesInput(BaseModel):
 class GetNodesTool(Tool[GetNodesInput, ToolRunOptions, StringToolOutput]):
     name = "GetNodes"
     description = (
-        "List all Kubernetes nodes with their status,"
-        " roles, and resource capacity"
+        "List all Kubernetes nodes with their status, roles, and resource capacity"
     )
     input_schema = GetNodesInput
 
@@ -89,10 +83,7 @@ class GetNodesTool(Tool[GetNodesInput, ToolRunOptions, StringToolOutput]):
         lines = []
         for node in nodes.items:
             name = node.metadata.name
-            conditions = {
-                c.type: c.status
-                for c in (node.status.conditions or [])
-            }
+            conditions = {c.type: c.status for c in (node.status.conditions or [])}
             ready = conditions.get("Ready", "Unknown")
             roles = [
                 k.split("/")[-1]
@@ -124,8 +115,7 @@ class GetEventsInput(BaseModel):
 class GetEventsTool(Tool[GetEventsInput, ToolRunOptions, StringToolOutput]):
     name = "GetEvents"
     description = (
-        "List recent Kubernetes events in a namespace,"
-        " useful for debugging issues"
+        "List recent Kubernetes events in a namespace, useful for debugging issues"
     )
     input_schema = GetEventsInput
 
@@ -147,13 +137,9 @@ class GetEventsTool(Tool[GetEventsInput, ToolRunOptions, StringToolOutput]):
             reason = event.reason or "?"
             message = event.message or ""
             ev_type = event.type or "Normal"
-            lines.append(
-                f"[{ev_type}] {kind}/{obj_name}: {reason} - {message}"
-            )
+            lines.append(f"[{ev_type}] {kind}/{obj_name}: {reason} - {message}")
         if not lines:
-            return StringToolOutput(
-                f"No events found in namespace '{input.namespace}'"
-            )
+            return StringToolOutput(f"No events found in namespace '{input.namespace}'")
         return StringToolOutput("\n".join(lines))
 
 
@@ -194,9 +180,7 @@ class DescribeResourceTool(
                 )
                 return StringToolOutput(self._format_pod(obj))
             elif rt == "node":
-                obj = await asyncio.to_thread(
-                    _core_v1.read_node, input.name
-                )
+                obj = await asyncio.to_thread(_core_v1.read_node, input.name)
                 return StringToolOutput(self._format_node(obj))
             elif rt == "deployment":
                 obj = await asyncio.to_thread(
@@ -218,16 +202,13 @@ class DescribeResourceTool(
                     " Supported: pod, node, deployment, service"
                 )
         except client.ApiException as e:
-            return StringToolOutput(
-                f"Error: {e.reason} (status {e.status})"
-            )
+            return StringToolOutput(f"Error: {e.reason} (status {e.status})")
 
     def _format_pod(self, pod: Any) -> str:
         containers = []
         for cs in pod.status.container_statuses or []:
             containers.append(
-                f"  {cs.name}: ready={cs.ready},"
-                f" restarts={cs.restart_count}"
+                f"  {cs.name}: ready={cs.ready}," f" restarts={cs.restart_count}"
             )
         return (
             f"Pod: {pod.metadata.name}\n"
@@ -239,8 +220,7 @@ class DescribeResourceTool(
 
     def _format_node(self, node: Any) -> str:
         conditions = "\n".join(
-            f"  {c.type}: {c.status}"
-            for c in (node.status.conditions or [])
+            f"  {c.type}: {c.status}" for c in (node.status.conditions or [])
         )
         return (
             f"Node: {node.metadata.name}\n"
@@ -261,9 +241,7 @@ class DescribeResourceTool(
         )
 
     def _format_service(self, svc: Any) -> str:
-        ports = ", ".join(
-            f"{p.port}/{p.protocol}" for p in (svc.spec.ports or [])
-        )
+        ports = ", ".join(f"{p.port}/{p.protocol}" for p in (svc.spec.ports or []))
         return (
             f"Service: {svc.metadata.name}\n"
             f"Namespace: {svc.metadata.namespace}\n"
