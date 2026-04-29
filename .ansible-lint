@@ -4,4 +4,5 @@ exclude_paths:
   - .github/
 
 mock_modules:
+  - kubernetes.core.k8s
   - kubernetes.core.k8s_info
