@@ -3,6 +3,9 @@ exclude_paths:
   - charts/
   - .github/
 
+warn_list:
+  - args[module]
+
 mock_modules:
   - kubernetes.core.k8s
   - kubernetes.core.k8s_info

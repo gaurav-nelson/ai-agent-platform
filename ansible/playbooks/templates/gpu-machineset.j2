@@ -7,22 +7,22 @@ metadata:
     machine.openshift.io/memoryMb: "65536"
     machine.openshift.io/vCPU: "16"
   labels:
-    machine.openshift.io/cluster-api-cluster: {{ clusterId }}
-  name: {{ clusterId }}-gpu-{{ cloudRegion }}
+    machine.openshift.io/cluster-api-cluster: {{ cluster_id }}
+  name: {{ cluster_id }}-gpu-{{ cloud_region }}
   namespace: openshift-machine-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      machine.openshift.io/cluster-api-cluster: {{ clusterId }}
-      machine.openshift.io/cluster-api-machineset: {{ clusterId }}-gpu-{{ cloudAvailabilityZone }}
+      machine.openshift.io/cluster-api-cluster: {{ cluster_id }}
+      machine.openshift.io/cluster-api-machineset: {{ cluster_id }}-gpu-{{ cloud_availability_zone }}
   template:
     metadata:
       labels:
-        machine.openshift.io/cluster-api-cluster: {{ clusterId }}
+        machine.openshift.io/cluster-api-cluster: {{ cluster_id }}
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
-        machine.openshift.io/cluster-api-machineset: {{ clusterId }}-gpu-{{ cloudAvailabilityZone }}
+        machine.openshift.io/cluster-api-machineset: {{ cluster_id }}-gpu-{{ cloud_availability_zone }}
     spec:
       taints:
         - effect: NoSchedule
@@ -35,7 +35,7 @@ spec:
       providerSpec:
         value:
           ami:
-            id: {{ instanceAmi }}
+            id: {{ instance_ami }}
           apiVersion: machine.openshift.io/v1beta1
           blockDevices:
           - ebs:
@@ -49,17 +49,17 @@ spec:
             name: aws-cloud-credentials
           deviceIndex: 0
           iamInstanceProfile:
-            id: {{ clusterId }}-worker-profile
+            id: {{ cluster_id }}-worker-profile
           instanceType: g6.2xlarge
           kind: AWSMachineProviderConfig
           metadata:
             creationTimestamp: null
           metadataServiceOptions: {}
           placement:
-            availabilityZone: {{ cloudAvailabilityZone }}
-            region: {{ cloudRegion }}
-          securityGroups: {{ securityGroups | to_json }}
+            availabilityZone: {{ cloud_availability_zone }}
+            region: {{ cloud_region }}
+          securityGroups: {{ security_groups | to_json }}
           subnet: {{ subnets | to_json }}
-          tags: {{ tags | to_json }}
+          tags: {{ machine_tags | to_json }}
           userDataSecret:
             name: worker-user-data
