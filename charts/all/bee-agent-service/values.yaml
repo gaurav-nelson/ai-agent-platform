@@ -11,7 +11,7 @@ global:
 replicaCount: 1
 
 image:
-  repository: quay.io/validatedpatterns/bee-agent-service
+  repository: quay.io/ganelson/bee-agent-service
   tag: latest
   pullPolicy: Always
 

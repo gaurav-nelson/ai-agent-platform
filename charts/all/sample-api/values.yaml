@@ -5,7 +5,7 @@ global:
 replicaCount: 1
 
 image:
-  repository: quay.io/validatedpatterns/sample-api
+  repository: quay.io/ganelson/sample-api
   tag: latest
   pullPolicy: Always
 

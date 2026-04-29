@@ -5,7 +5,7 @@ global:
 replicaCount: 1
 
 image:
-  repository: quay.io/validatedpatterns/agent-chat-ui
+  repository: quay.io/ganelson/agent-chat-ui
   tag: latest
   pullPolicy: Always
 
