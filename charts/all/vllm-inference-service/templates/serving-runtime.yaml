@@ -24,6 +24,10 @@ spec:
           value: /cache
         - name: VLLM_CACHE_ROOT
           value: /cache/vllm
+        - name: FLASHINFER_WORKSPACE_DIR
+          value: /cache/flashinfer
+        - name: HOME
+          value: /cache
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:
