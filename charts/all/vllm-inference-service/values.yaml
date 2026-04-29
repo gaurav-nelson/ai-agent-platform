@@ -52,8 +52,8 @@ vllmServingRuntime:
     - vllm.entrypoints.openai.api_server
 
   image:
-    repository: quay.io/modh/vllm
-    tag: rhoai-2.20-cuda
+    repository: vllm/vllm-openai
+    tag: v0.20.0
 
   port: 8080
 
