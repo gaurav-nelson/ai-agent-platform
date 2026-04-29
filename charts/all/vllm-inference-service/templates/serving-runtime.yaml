@@ -20,6 +20,10 @@ spec:
       env:
         - name: HF_HOME
           value: /cache
+        - name: XDG_CACHE_HOME
+          value: /cache
+        - name: VLLM_CACHE_ROOT
+          value: /cache/vllm
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:
