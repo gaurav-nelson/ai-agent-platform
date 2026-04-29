@@ -58,4 +58,4 @@ vllmServingRuntime:
   port: 8080
 
 acceleratorProfile:
-  enabled: true
+  enabled: false
